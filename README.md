@@ -67,6 +67,32 @@ Every payload conforms to this schema (validated on load):
   tags: [role-play, dan]
 ```
 
+## Quick example
+
+Send a payload to any HTTP endpoint that takes a prompt and returns JSON:
+
+```python
+import asyncio
+
+from llm_security_scanner import load_payloads
+from llm_security_scanner.targets import HTTPTarget
+
+
+async def main() -> None:
+    target = HTTPTarget(
+        name="local-ollama",
+        url="http://localhost:11434/api/generate",
+        body_template={"model": "llama3", "prompt": "{prompt}", "stream": False},
+        response_path=["response"],
+    )
+    for payload in load_payloads(languages=["tr"]):
+        result = await target.send(payload.payload)
+        print(f"{payload.id}: {result.text[:80]}")
+
+
+asyncio.run(main())
+```
+
 ## Development
 
 Requirements: Python 3.10+ and [`uv`](https://docs.astral.sh/uv/) (or `pip`).
@@ -90,8 +116,8 @@ mypy
 - [x] Project skeleton: tooling, base protocols, core models
 - [x] Payload loader with YAML validation
 - [x] Seed payload library (5 EN + 5 TR across 3 categories)
+- [x] Generic HTTP target adapter
 - [ ] Rule-based evaluator (substring + regex)
-- [ ] First target adapter (generic HTTP)
 - [ ] Provider adapters: Anthropic, OpenAI, Ollama
 - [ ] LLM-as-judge evaluator
 - [ ] Reporters: Markdown, JSON, SARIF, HTML
