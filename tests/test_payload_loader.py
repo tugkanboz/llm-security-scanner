@@ -118,3 +118,9 @@ class TestLoadPayloads:
         languages = {p.language for p in result}
         assert "tr" in languages
         assert "en" in languages
+
+    def test_default_covers_expected_languages(self) -> None:
+        """The bundled library ships parallel payload sets for every supported language."""
+        result = load_payloads()
+        languages = {p.language for p in result}
+        assert {"en", "tr", "de", "es", "fr"} <= languages

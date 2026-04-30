@@ -162,7 +162,7 @@ mypy
 
 - [x] Project skeleton: tooling, base protocols, core models
 - [x] Payload loader with YAML validation
-- [x] Seed payload library (5 EN + 5 TR across 3 categories)
+- [x] Seed payload library (5 languages × 3 categories: EN, TR, DE, ES, FR)
 - [x] Generic HTTP target adapter
 - [x] Rule-based evaluator (substring + regex)
 - [x] Scanner core orchestration with bounded concurrency
