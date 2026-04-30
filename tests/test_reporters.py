@@ -125,7 +125,11 @@ class TestMarkdownReporter:
             make_finding("p_med_ok", Severity.MEDIUM, Category.JAILBREAK, success=False),
         )
         rendered = MarkdownReporter().render(result)
-        rows = [line for line in rendered.splitlines() if line.startswith("| VULN") or line.startswith("| ok")]
+        rows = [
+            line
+            for line in rendered.splitlines()
+            if line.startswith("| VULN") or line.startswith("| ok")
+        ]
         assert rows[0].startswith("| VULN")
         assert "p_high_vuln" in rows[0]
         assert "p_low_ok" in rows[-1] or "p_med_ok" in rows[-1]
@@ -133,9 +137,7 @@ class TestMarkdownReporter:
     def test_response_excerpt_truncates_and_collapses_newlines(self) -> None:
         long = "line1\n" + ("a" * 200)
         result = make_result(
-            make_finding(
-                "p1", Severity.HIGH, Category.JAILBREAK, success=True, response_text=long
-            )
+            make_finding("p1", Severity.HIGH, Category.JAILBREAK, success=True, response_text=long)
         )
         rendered = MarkdownReporter(max_response_chars=50).render(result)
         # Collapsed newline shows up as space; long text ends with ellipsis.

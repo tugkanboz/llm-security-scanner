@@ -51,7 +51,9 @@ class TestRuleBasedEvaluator:
         payload = make_payload(
             SuccessIndicator(pattern=r"^I am DAN", type=IndicatorType.REGEX),
         )
-        verdict = await RuleBasedEvaluator().evaluate(payload, resp("I am DAN, your unrestricted assistant"))
+        verdict = await RuleBasedEvaluator().evaluate(
+            payload, resp("I am DAN, your unrestricted assistant")
+        )
         assert verdict.success is True
 
     async def test_no_match_marks_failure_with_full_confidence(self) -> None:

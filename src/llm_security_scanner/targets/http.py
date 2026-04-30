@@ -113,8 +113,7 @@ class HTTPTarget:
 
         if http_response.status_code >= 400:
             raise TargetError(
-                f"HTTP {http_response.status_code} from {self.url}: "
-                f"{http_response.text[:200]}"
+                f"HTTP {http_response.status_code} from {self.url}: {http_response.text[:200]}"
             )
 
         try:

@@ -65,9 +65,7 @@ def load_payload_file(path: Path | str) -> list[Payload]:
         try:
             payloads.append(Payload.model_validate(entry))
         except ValidationError as exc:
-            raise PayloadError(
-                f"Invalid payload entry #{index} in {file_path}:\n{exc}"
-            ) from exc
+            raise PayloadError(f"Invalid payload entry #{index} in {file_path}:\n{exc}") from exc
 
     return payloads
 
@@ -121,6 +119,4 @@ def _check_unique_ids(payloads: list[Payload]) -> None:
         else:
             seen[p.id] = p
     if duplicates:
-        raise PayloadError(
-            "Duplicate payload IDs detected: " + ", ".join(sorted(set(duplicates)))
-        )
+        raise PayloadError("Duplicate payload IDs detected: " + ", ".join(sorted(set(duplicates))))
