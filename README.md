@@ -67,6 +67,43 @@ Every payload conforms to this schema (validated on load):
   tags: [role-play, dan]
 ```
 
+## CLI
+
+`llm-sec-scan` ships with two commands:
+
+```bash
+# Browse the bundled payload library
+llm-sec-scan list-payloads --language tr --category jailbreak
+
+# Run a scan from a target config and write a Markdown report
+llm-sec-scan scan \
+  --target ./examples/ollama.yaml \
+  --language tr \
+  --format markdown \
+  --output report.md
+```
+
+A target config is a small YAML file. `${VAR}` references are expanded
+from the environment so secrets stay out of disk:
+
+```yaml
+type: http
+name: openai-chat
+url: https://api.openai.com/v1/chat/completions
+headers:
+  Authorization: "Bearer ${OPENAI_API_KEY}"
+  Content-Type: application/json
+body_template:
+  model: "gpt-4o-mini"
+  messages:
+    - role: user
+      content: "{prompt}"
+response_path: ["choices", 0, "message", "content"]
+```
+
+`scan` exits with code `1` whenever at least one vulnerable finding is
+detected, so it slots cleanly into CI.
+
 ## Quick example
 
 Run the bundled Turkish payloads against a local Ollama endpoint, score
@@ -129,9 +166,11 @@ mypy
 - [x] Generic HTTP target adapter
 - [x] Rule-based evaluator (substring + regex)
 - [x] Scanner core orchestration with bounded concurrency
+- [x] Reporters: Markdown and JSON
+- [x] CLI (`llm-sec-scan`) with `scan` and `list-payloads`
 - [ ] Provider adapters: Anthropic, OpenAI, Ollama
 - [ ] LLM-as-judge evaluator
-- [ ] Reporters: Markdown, JSON, SARIF, HTML
+- [ ] Reporters: SARIF and HTML
 - [ ] Turkish payload library (jailbreak, prompt injection, sys-prompt leak)
 - [ ] CLI (`llm-sec-scan`) with scan/list/report commands
 - [ ] CI: lint, type-check, tests on every PR
