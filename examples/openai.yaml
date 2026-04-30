@@ -1,0 +1,21 @@
+# Example target config: an OpenAI-compatible chat completions endpoint.
+#
+# Set your API key in the environment first:
+#   export OPENAI_API_KEY=sk-...
+#
+# Then scan:
+#   llm-sec-scan scan --target examples/openai.yaml --language en
+
+type: http
+name: openai-chat
+url: https://api.openai.com/v1/chat/completions
+headers:
+  Authorization: "Bearer ${OPENAI_API_KEY}"
+  Content-Type: application/json
+body_template:
+  model: gpt-4o-mini
+  messages:
+    - role: user
+      content: "{prompt}"
+response_path: ["choices", 0, "message", "content"]
+timeout: 60.0

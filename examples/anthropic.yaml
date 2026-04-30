@@ -1,0 +1,23 @@
+# Example target config: the Anthropic Messages API.
+#
+# Set your API key in the environment first:
+#   export ANTHROPIC_API_KEY=sk-ant-...
+#
+# Then scan:
+#   llm-sec-scan scan --target examples/anthropic.yaml --language tr
+
+type: http
+name: anthropic-claude
+url: https://api.anthropic.com/v1/messages
+headers:
+  x-api-key: "${ANTHROPIC_API_KEY}"
+  anthropic-version: "2023-06-01"
+  Content-Type: application/json
+body_template:
+  model: claude-haiku-4-5-20251001
+  max_tokens: 1024
+  messages:
+    - role: user
+      content: "{prompt}"
+response_path: ["content", 0, "text"]
+timeout: 60.0
