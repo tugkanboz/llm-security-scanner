@@ -88,7 +88,8 @@ mypy
 ## Roadmap
 
 - [x] Project skeleton: tooling, base protocols, core models
-- [ ] Payload loader with YAML validation
+- [x] Payload loader with YAML validation
+- [x] Seed payload library (5 EN + 5 TR across 3 categories)
 - [ ] Rule-based evaluator (substring + regex)
 - [ ] First target adapter (generic HTTP)
 - [ ] Provider adapters: Anthropic, OpenAI, Ollama
