@@ -69,12 +69,14 @@ Every payload conforms to this schema (validated on load):
 
 ## Quick example
 
-Send a payload to any HTTP endpoint that takes a prompt and returns JSON:
+Run the bundled Turkish payloads against a local Ollama endpoint, score
+each response with the rule-based evaluator, and print a summary:
 
 ```python
 import asyncio
 
-from llm_security_scanner import load_payloads
+from llm_security_scanner import Scanner, load_payloads
+from llm_security_scanner.evaluators import RuleBasedEvaluator
 from llm_security_scanner.targets import HTTPTarget
 
 
@@ -85,9 +87,17 @@ async def main() -> None:
         body_template={"model": "llama3", "prompt": "{prompt}", "stream": False},
         response_path=["response"],
     )
-    for payload in load_payloads(languages=["tr"]):
-        result = await target.send(payload.payload)
-        print(f"{payload.id}: {result.text[:80]}")
+    scanner = Scanner(
+        target=target,
+        evaluator=RuleBasedEvaluator(),
+        concurrency=2,
+    )
+    result = await scanner.scan(load_payloads(languages=["tr"]))
+
+    print(f"{result.target_name}: {result.vulnerable_count}/{result.total} vulnerable")
+    for finding in result.findings:
+        flag = "VULN" if finding.is_vulnerable else "ok  "
+        print(f"  [{flag}] {finding.payload.id} — {finding.evaluation.reason}")
 
 
 asyncio.run(main())
@@ -117,7 +127,8 @@ mypy
 - [x] Payload loader with YAML validation
 - [x] Seed payload library (5 EN + 5 TR across 3 categories)
 - [x] Generic HTTP target adapter
-- [ ] Rule-based evaluator (substring + regex)
+- [x] Rule-based evaluator (substring + regex)
+- [x] Scanner core orchestration with bounded concurrency
 - [ ] Provider adapters: Anthropic, OpenAI, Ollama
 - [ ] LLM-as-judge evaluator
 - [ ] Reporters: Markdown, JSON, SARIF, HTML
