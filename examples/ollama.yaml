@@ -1,0 +1,18 @@
+# Example target config: a local Ollama instance.
+#
+# Run an Ollama server locally first:
+#   ollama serve
+#   ollama pull llama3
+#
+# Then scan it:
+#   llm-sec-scan scan --target examples/ollama.yaml --language tr
+
+type: http
+name: local-ollama
+url: http://localhost:11434/api/generate
+body_template:
+  model: llama3
+  prompt: "{prompt}"
+  stream: false
+response_path: ["response"]
+timeout: 60.0
