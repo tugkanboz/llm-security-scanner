@@ -1,1 +1,118 @@
 # llm-security-scanner
+
+> Red-team toolkit for testing LLM applications against prompt injection,
+> jailbreaks, data exfiltration, and tool abuse — with first-class Turkish
+> payload support.
+
+`llm-security-scanner` is an open-source security testing framework for
+applications built on top of large language models. Think of it as
+"OWASP ZAP for LLM apps": a pluggable engine that fires curated payloads at a
+target, evaluates whether the model misbehaved, and produces actionable
+reports. The project ships a Turkish payload library alongside English to
+serve the Turkish-speaking developer community.
+
+> ⚠️ **Responsible use.** This toolkit is intended for defensive research,
+> red-teaming systems you own or have authorisation to test, and educational
+> exploration of LLM failure modes. Do not use it to attack systems you do
+> not have permission to test.
+
+## Status
+
+Early development. APIs are unstable until v1.0.
+
+## Why another scanner?
+
+| Project       | Differentiator of `llm-security-scanner`                                |
+| ------------- | ----------------------------------------------------------------------- |
+| Garak         | Turkish payload library + OWASP LLM Top 10 alignment baked into models  |
+| PromptFoo     | Security-first focus rather than general eval harness                   |
+| Giskard       | Standalone CLI + library, no platform lock-in                           |
+
+## Architecture
+
+The scanner is built around four pluggable abstractions, all defined as
+runtime-checkable `Protocol`s in `src/llm_security_scanner/`:
+
+- **`Target`** (`targets/base.py`) — adapter for an LLM provider (Anthropic,
+  OpenAI, Ollama, generic HTTP). Translates a prompt into a `TargetResponse`.
+- **`Evaluator`** (`evaluators/base.py`) — judges whether a payload
+  succeeded. Implementations include rule-based matchers and LLM-as-judge.
+- **`Reporter`** (`reporters/base.py`) — renders a `ScanResult` as Markdown,
+  HTML, JSON, or SARIF.
+- **Payloads** (`payloads/`) — YAML data files validated by the Pydantic
+  `Payload` model. Non-developers can contribute payloads via PRs.
+
+The core scanner depends only on these protocols, so the engine never knows
+which provider, evaluator, or output format is in use.
+
+## Payload schema
+
+Every payload conforms to this schema (validated on load):
+
+```yaml
+- id: jb-tr-001
+  name: "Turkish DAN variant"
+  category: jailbreak           # jailbreak | direct_injection | indirect_injection
+                                # | sys_prompt_leak | data_exfil | tool_abuse | multi_turn
+  owasp_llm_top10: LLM01
+  severity: high                # low | medium | high | critical
+  language: tr                  # ISO 639-1
+  payload: |
+    ...prompt text...
+  success_indicators:
+    - pattern: "DAN:"
+      type: substring           # substring | regex | semantic
+  references:
+    - "https://..."
+  tags: [role-play, dan]
+```
+
+## Development
+
+Requirements: Python 3.10+ and [`uv`](https://docs.astral.sh/uv/) (or `pip`).
+
+```bash
+# Clone and install
+git clone https://github.com/tugkanboz/llm-security-scanner.git
+cd llm-security-scanner
+uv pip install -e ".[dev]"
+
+# Run tests
+pytest
+
+# Lint and type-check
+ruff check .
+mypy
+```
+
+## Roadmap
+
+- [x] Project skeleton: tooling, base protocols, core models
+- [ ] Payload loader with YAML validation
+- [ ] Rule-based evaluator (substring + regex)
+- [ ] First target adapter (generic HTTP)
+- [ ] Provider adapters: Anthropic, OpenAI, Ollama
+- [ ] LLM-as-judge evaluator
+- [ ] Reporters: Markdown, JSON, SARIF, HTML
+- [ ] Turkish payload library (jailbreak, prompt injection, sys-prompt leak)
+- [ ] CLI (`llm-sec-scan`) with scan/list/report commands
+- [ ] CI: lint, type-check, tests on every PR
+- [ ] v1.0 stabilisation and PyPI release
+
+## Contributing
+
+Contributions are welcome — payloads especially. See `CONTRIBUTING.md` (TBD)
+for guidelines. By contributing you agree your work is licensed under the
+project's MIT licence.
+
+## Türkçe
+
+`llm-security-scanner`, LLM uygulamalarını prompt injection, jailbreak ve veri
+sızdırma saldırılarına karşı test eden açık kaynaklı bir red-team aracıdır.
+Türkçe payload kütüphanesiyle Türkçe konuşan geliştirici topluluğunu
+hedefler. Proje aktif geliştirme aşamasındadır; katkılara — özellikle Türkçe
+payload katkılarına — açıktır.
+
+## Licence
+
+MIT (see `LICENSE`, TBD).
