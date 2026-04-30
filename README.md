@@ -1,5 +1,10 @@
 # llm-security-scanner
 
+[![CI](https://github.com/tugkanboz/llm-security-scanner/actions/workflows/test.yml/badge.svg)](https://github.com/tugkanboz/llm-security-scanner/actions/workflows/test.yml)
+[![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-blue.svg)](https://www.python.org/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![Code style: ruff](https://img.shields.io/badge/ruff-checked-brightgreen)](https://docs.astral.sh/ruff/)
+
 > Red-team toolkit for testing LLM applications against prompt injection,
 > jailbreaks, data exfiltration, and tool abuse — with first-class Turkish
 > payload support.
@@ -168,19 +173,27 @@ mypy
 - [x] Scanner core orchestration with bounded concurrency
 - [x] Reporters: Markdown and JSON
 - [x] CLI (`llm-sec-scan`) with `scan` and `list-payloads`
+- [x] CI: lint, type-check, tests on every PR
+- [ ] Native-speaker review of DE/ES/FR payload sets
 - [ ] Provider adapters: Anthropic, OpenAI, Ollama
 - [ ] LLM-as-judge evaluator
 - [ ] Reporters: SARIF and HTML
-- [ ] Turkish payload library (jailbreak, prompt injection, sys-prompt leak)
-- [ ] CLI (`llm-sec-scan`) with scan/list/report commands
-- [ ] CI: lint, type-check, tests on every PR
 - [ ] v1.0 stabilisation and PyPI release
+
+## Translation note
+
+The Turkish (`tr`) payloads are author-written. The German (`de`),
+Spanish (`es`), and French (`fr`) sets were initially produced with AI
+assistance and have **not yet been reviewed by native speakers**. PRs
+improving phrasing, idiom, or success-indicator regexes from native
+speakers are very welcome — see `CONTRIBUTING.md`.
 
 ## Contributing
 
-Contributions are welcome — payloads especially. See `CONTRIBUTING.md` (TBD)
-for guidelines. By contributing you agree your work is licensed under the
-project's MIT licence.
+Contributions are welcome — payloads especially. See
+[`CONTRIBUTING.md`](CONTRIBUTING.md) for guidelines and the payload
+schema. Security issues should follow [`SECURITY.md`](SECURITY.md);
+participation is governed by the [code of conduct](CODE_OF_CONDUCT.md).
 
 ## Türkçe
 
@@ -192,4 +205,4 @@ payload katkılarına — açıktır.
 
 ## Licence
 
-MIT (see `LICENSE`, TBD).
+MIT — see [`LICENSE`](LICENSE).
