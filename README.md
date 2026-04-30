@@ -6,7 +6,7 @@
 [![Code style: ruff](https://img.shields.io/badge/ruff-checked-brightgreen)](https://docs.astral.sh/ruff/)
 
 > Red-team toolkit for testing LLM applications against prompt injection,
-> jailbreaks, data exfiltration, and tool abuse — with first-class Turkish
+> jailbreaks, data exfiltration, and tool abuse, with first-class Turkish
 > payload support.
 
 `llm-security-scanner` is an open-source security testing framework for
@@ -38,13 +38,13 @@ Early development. APIs are unstable until v1.0.
 The scanner is built around four pluggable abstractions, all defined as
 runtime-checkable `Protocol`s in `src/llm_security_scanner/`:
 
-- **`Target`** (`targets/base.py`) — adapter for an LLM provider (Anthropic,
+- **`Target`** (`targets/base.py`): adapter for an LLM provider (Anthropic,
   OpenAI, Ollama, generic HTTP). Translates a prompt into a `TargetResponse`.
-- **`Evaluator`** (`evaluators/base.py`) — judges whether a payload
+- **`Evaluator`** (`evaluators/base.py`): judges whether a payload
   succeeded. Implementations include rule-based matchers and LLM-as-judge.
-- **`Reporter`** (`reporters/base.py`) — renders a `ScanResult` as Markdown,
+- **`Reporter`** (`reporters/base.py`): renders a `ScanResult` as Markdown,
   HTML, JSON, or SARIF.
-- **Payloads** (`payloads/`) — YAML data files validated by the Pydantic
+- **Payloads** (`payloads/`): YAML data files validated by the Pydantic
   `Payload` model. Non-developers can contribute payloads via PRs.
 
 The core scanner depends only on these protocols, so the engine never knows
@@ -139,7 +139,7 @@ async def main() -> None:
     print(f"{result.target_name}: {result.vulnerable_count}/{result.total} vulnerable")
     for finding in result.findings:
         flag = "VULN" if finding.is_vulnerable else "ok  "
-        print(f"  [{flag}] {finding.payload.id} — {finding.evaluation.reason}")
+        print(f"  [{flag}] {finding.payload.id}: {finding.evaluation.reason}")
 
 
 asyncio.run(main())
@@ -186,11 +186,11 @@ The Turkish (`tr`) payloads are author-written. The German (`de`),
 Spanish (`es`), and French (`fr`) sets were initially produced with AI
 assistance and have **not yet been reviewed by native speakers**. PRs
 improving phrasing, idiom, or success-indicator regexes from native
-speakers are very welcome — see `CONTRIBUTING.md`.
+speakers are very welcome. See `CONTRIBUTING.md`.
 
 ## Contributing
 
-Contributions are welcome — payloads especially. See
+Contributions are welcome, payloads especially. See
 [`CONTRIBUTING.md`](CONTRIBUTING.md) for guidelines and the payload
 schema. Security issues should follow [`SECURITY.md`](SECURITY.md);
 participation is governed by the [code of conduct](CODE_OF_CONDUCT.md).
@@ -200,9 +200,9 @@ participation is governed by the [code of conduct](CODE_OF_CONDUCT.md).
 `llm-security-scanner`, LLM uygulamalarını prompt injection, jailbreak ve veri
 sızdırma saldırılarına karşı test eden açık kaynaklı bir red-team aracıdır.
 Türkçe payload kütüphanesiyle Türkçe konuşan geliştirici topluluğunu
-hedefler. Proje aktif geliştirme aşamasındadır; katkılara — özellikle Türkçe
-payload katkılarına — açıktır.
+hedefler. Proje aktif geliştirme aşamasındadır; katkılara, özellikle Türkçe
+payload katkılarına açıktır.
 
 ## Licence
 
-MIT — see [`LICENSE`](LICENSE).
+MIT, see [`LICENSE`](LICENSE).
