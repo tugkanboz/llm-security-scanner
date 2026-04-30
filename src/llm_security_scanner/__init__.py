@@ -18,6 +18,7 @@ from llm_security_scanner.models import (
     TargetResponse,
 )
 from llm_security_scanner.payloads import load_payload_file, load_payloads
+from llm_security_scanner.scanner import Scanner
 
 __version__ = "0.1.0"
 
@@ -31,6 +32,7 @@ __all__ = [
     "PayloadError",
     "ReporterError",
     "ScanResult",
+    "Scanner",
     "Severity",
     "SuccessIndicator",
     "TargetError",
