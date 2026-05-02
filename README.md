@@ -23,7 +23,7 @@ serve the Turkish-speaking developer community.
 
 ## Status
 
-Early development. APIs are unstable until v1.0.
+Active development. The core scanner, CLI, Turkish payload library, and HTTP/Ollama target adapters are functional and tested. Provider adapters (Anthropic, OpenAI), additional reporters (SARIF, HTML), and the LLM-as-judge evaluator land progressively toward v1.0.
 
 ## Why another scanner?
 
